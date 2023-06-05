@@ -9,7 +9,7 @@ import java.nio.ByteBuffer
  * @Description TODO
  * @CreateTime 2023年06月05日 14:52:00
  */
-class LocVar private constructor(
+internal class LocVar private constructor(
     buf: ByteBuffer,
 ) {
 
@@ -21,7 +21,12 @@ class LocVar private constructor(
 
     val varName: String = BinaryChunk.getLuaString(buf)
 
-    val startPC: Int = buf.int
+    /**
+     * ### startPC
+     *
+     * + buf::getInt 是一个在 buf 中的 consume 动作, 不是一个取值
+     */
+    val startPC: Int = buf.getInt()
 
-    val endPC: Int = buf.int
+    val endPC: Int = buf.getInt()
 }

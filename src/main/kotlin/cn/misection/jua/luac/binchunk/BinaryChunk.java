@@ -18,14 +18,13 @@ public class BinaryChunk {
     private static final int    LUAC_INT         = 0x5678;
     private static final double LUAC_NUM         = 370.5;
 
-    public static Prototype undump(byte[] data) {
+    public static FuncPrototype undump(byte[] data) {
         ByteBuffer buf = ByteBuffer.wrap(data)
                 .order(ByteOrder.LITTLE_ENDIAN);
         checkHead(buf);
         buf.get(); // size_upvalues
-        Prototype mainFunc = new Prototype();
-        mainFunc.read(buf, "");
-        return mainFunc;
+        // mainFunc
+        return FuncPrototype.alloc(buf, "");
     }
 
     private static void checkHead(ByteBuffer buf) {
