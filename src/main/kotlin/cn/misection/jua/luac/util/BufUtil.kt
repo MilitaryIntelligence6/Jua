@@ -7,5 +7,5 @@ package cn.misection.jua.luac.util
  * @Description TODO
  * @CreateTime 2023年06月05日 16:44:00
  */
-class BufUtil {
+internal object BufUtil {
 }

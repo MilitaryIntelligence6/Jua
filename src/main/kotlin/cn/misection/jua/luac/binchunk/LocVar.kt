@@ -1,5 +1,6 @@
 package cn.misection.jua.luac.binchunk
 
+import cn.misection.jua.luac.extension.getLuaString
 import java.nio.ByteBuffer
 
 /**
@@ -19,7 +20,7 @@ internal class LocVar private constructor(
         fun alloc(buf: ByteBuffer) = LocVar(buf)
     }
 
-    val varName: String = BinaryChunk.getLuaString(buf)
+    val varName: String = buf.getLuaString()
 
     /**
      * ### startPC

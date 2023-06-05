@@ -1,90 +1,79 @@
-package cn.misection.jua.luac;
+package cn.misection.jua.luac
 
-import cn.misection.jua.luac.binchunk.BinaryChunk;
-import cn.misection.jua.luac.binchunk.FuncPrototype;
-import cn.misection.jua.luac.binchunk.LocVar;
-import cn.misection.jua.luac.binchunk.Upvalue;
+import cn.misection.jua.luac.binchunk.BinaryChunk.undump
+import cn.misection.jua.luac.binchunk.FuncPrototype
+import java.nio.file.Files
+import java.nio.file.Paths
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-
-public class Main {
-
-    public static void main(String[] args) throws Exception {
-        if (args.length > 0) {
-            byte[] data = Files.readAllBytes(Paths.get(args[0]));
-            FuncPrototype proto = BinaryChunk.undump(data);
-            list(proto);
+object Main {
+    @Throws(Exception::class)
+    @JvmStatic
+    fun main(args: Array<String>) {
+        if (args.size > 0) {
+            val data = Files.readAllBytes(Paths.get(args[0]))
+            val proto = undump(data)
+            list(proto)
         }
     }
 
-    private static void list(FuncPrototype f) {
-        printHeader(f);
-        printCode(f);
-        printDetail(f);
-        for (FuncPrototype p : f.getPrototypes()) {
-            list(p);
+    private fun list(f: FuncPrototype) {
+        printHeader(f)
+        printCode(f)
+        printDetail(f)
+        for (p in f.prototypes) {
+            list(p)
         }
     }
 
-    private static void printHeader(FuncPrototype f) {
-        String funcType = f.getLineDefined() > 0 ? "function" : "main";
-        String varargFlag = f.isVararg() > 0 ? "+" : "";
-
+    private fun printHeader(f: FuncPrototype) {
+        val funcType = if (f.lineDefined > 0) "function" else "main"
+        val varargFlag = if (f.isVararg > 0) "+" else ""
         System.out.printf("\n%s <%s:%d,%d> (%d instructions)\n",
-                funcType, f.getSource(), f.getLineDefined(), f.getLastLineDefined(),
-                f.getCode().size());
-
+            funcType, f.source, f.lineDefined, f.lastLineDefined,
+            f.code.size)
         System.out.printf("%d%s params, %d slots, %d upvalues, ",
-                f.getNumParams(), varargFlag, f.getMaxStackSize(), f.getUpvalues().size());
-
+            f.numParams, varargFlag, f.maxStackSize, f.upvalues.size)
         System.out.printf("%d locals, %d constants, %d functions\n",
-                f.getLocVars().size(), f.getConstants().size(), f.getPrototypes().size());
+            f.locVars.size, f.constants.size, f.prototypes.size)
     }
 
-    private static void printCode(FuncPrototype f) {
-        List<Integer> code = f.getCode();
-        List<Integer> lineInfo = f.getLineInfo();
-        for (int i = 0; i < code.size(); i++) {
-            String line = lineInfo.size() > 0 ? String.valueOf(lineInfo.get(i)) : "-";
-            System.out.printf("\t%d\t[%s]\t0x%08X\n", i + 1, line, code.get(i));
+    private fun printCode(f: FuncPrototype) {
+        val code = f.code
+        val lineInfo = f.lineInfo
+        for (i in code.indices) {
+            val line = if (lineInfo.isNotEmpty()) lineInfo[i].toString() else "-"
+            System.out.printf("\t%d\t[%s]\t0x%08X\n", i + 1, line, code[i])
         }
     }
 
-    private static void printDetail(FuncPrototype f) {
-        System.out.printf("constants (%d):\n", f.getConstants().size());
-        int i = 1;
-        for (Object k : f.getConstants()) {
-            System.out.printf("\t%d\t%s\n", i++, constantToString(k));
+    private fun printDetail(f: FuncPrototype) {
+        System.out.printf("constants (%d):\n", f.constants.size)
+        var i = 1
+        for (k in f.constants) {
+            System.out.printf("\t%d\t%s\n", i++, constantToString(k))
         }
-
-        i = 0;
-        System.out.printf("locals (%d):\n", f.getLocVars().size());
-        for (LocVar locVar : f.getLocVars()) {
+        i = 0
+        System.out.printf("locals (%d):\n", f.locVars.size)
+        for (locVar in f.locVars) {
             System.out.printf("\t%d\t%s\t%d\t%d\n", i++,
-                    locVar.getVarName(), locVar.getStartPC() + 1, locVar.getEndPC() + 1);
+                locVar.varName, locVar.startPC + 1, locVar.endPC + 1)
         }
-
-        i = 0;
-        System.out.printf("upvalues (%d):\n", f.getUpvalues().size());
-        for (Upvalue upval : f.getUpvalues()) {
-            String name = f.getUpvalueNames().size() > 0 ? f.getUpvalueNames().get(i) : "-";
+        i = 0
+        System.out.printf("upvalues (%d):\n", f.upvalues.size)
+        for (upval in f.upvalues) {
+            val name = if (f.upvalueNames.isNotEmpty()) f.upvalueNames[i] else "-"
             System.out.printf("\t%d\t%s\t%d\t%d\n", i++,
-                    name, upval.getInstack(), upval.getIdx());
+                name, upval.instack, upval.idx)
         }
     }
 
-    private static String constantToString(Object k) {
-        if (k == null) {
-            return "nil";
-        } else if (k instanceof String) {
-            return "\"" + k + "\"";
-        } else {
-            return k.toString();
+    private fun constantToString(k: Any?): String {
+        return when (k) {
+            null -> "nil"
+            is String -> "\"" + k + "\""
+            else -> k.toString()
         }
     }
 
-    private static class Prototype {
-    }
+    private class Prototype
 }
