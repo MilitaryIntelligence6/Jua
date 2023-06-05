@@ -1,4 +1,4 @@
-package com.github.zxh0.luago.binchunk;
+package cn.misection.jua.luac.binchunk;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -103,8 +103,7 @@ public class Prototype {
     private void readLocVars(ByteBuffer buf) {
         locVars = new LocVar[buf.getInt()];
         for (int i = 0; i < locVars.length; i++) {
-            locVars[i] = new LocVar();
-            locVars[i].read(buf);
+            locVars[i] = LocVar.alloc(buf);
         }
     }
 

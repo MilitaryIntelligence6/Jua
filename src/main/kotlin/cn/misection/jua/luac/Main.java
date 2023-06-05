@@ -1,9 +1,9 @@
-package com.github.zxh0.luago;
+package cn.misection.jua.luac;
 
-import com.github.zxh0.luago.binchunk.BinaryChunk;
-import com.github.zxh0.luago.binchunk.LocVar;
-import com.github.zxh0.luago.binchunk.Prototype;
-import com.github.zxh0.luago.binchunk.Upvalue;
+import cn.misection.jua.luac.binchunk.BinaryChunk;
+import cn.misection.jua.luac.binchunk.LocVar;
+import cn.misection.jua.luac.binchunk.Prototype;
+import cn.misection.jua.luac.binchunk.Upvalue;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;

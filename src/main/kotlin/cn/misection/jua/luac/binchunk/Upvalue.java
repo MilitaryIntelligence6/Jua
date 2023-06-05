@@ -1,4 +1,4 @@
-package com.github.zxh0.luago.binchunk;
+package cn.misection.jua.luac.binchunk;
 
 import lombok.Getter;
 import lombok.Setter;

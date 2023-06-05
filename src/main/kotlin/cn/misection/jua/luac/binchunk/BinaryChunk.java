@@ -1,4 +1,4 @@
-package com.github.zxh0.luago.binchunk;
+package cn.misection.jua.luac.binchunk;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
