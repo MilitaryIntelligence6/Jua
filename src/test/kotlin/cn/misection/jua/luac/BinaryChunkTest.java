@@ -28,7 +28,7 @@ public class BinaryChunkTest {
         assertEquals(1, proto.getUpvalues().size());
         assertEquals(0, proto.getPrototypes().size());
         assertEquals(4, proto.getLineInfo().size());
-        assertEquals(0, proto.getLocVars().size());
+        assertEquals(0, proto.getLocalVars().size());
         assertEquals(1, proto.getUpvalueNames().size());
 
         assertEquals("print", proto.getConstants().get(0));

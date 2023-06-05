@@ -5,11 +5,12 @@ import cn.misection.jua.luac.binchunk.FuncPrototype
 import java.nio.file.Files
 import java.nio.file.Paths
 
-object Main {
+internal object LuacL {
+
     @Throws(Exception::class)
     @JvmStatic
     fun main(args: Array<String>) {
-        if (args.size > 0) {
+        if (args.isNotEmpty()) {
             val data = Files.readAllBytes(Paths.get(args[0]))
             val proto = undump(data)
             list(proto)
@@ -20,21 +21,15 @@ object Main {
         printHeader(f)
         printCode(f)
         printDetail(f)
-        for (p in f.prototypes) {
-            list(p)
-        }
+        for (p in f.prototypes) list(p)
     }
 
     private fun printHeader(f: FuncPrototype) {
         val funcType = if (f.lineDefined > 0) "function" else "main"
         val varargFlag = if (f.isVararg > 0) "+" else ""
-        System.out.printf("\n%s <%s:%d,%d> (%d instructions)\n",
-            funcType, f.source, f.lineDefined, f.lastLineDefined,
-            f.code.size)
-        System.out.printf("%d%s params, %d slots, %d upvalues, ",
-            f.numParams, varargFlag, f.maxStackSize, f.upvalues.size)
-        System.out.printf("%d locals, %d constants, %d functions\n",
-            f.locVars.size, f.constants.size, f.prototypes.size)
+        println("\n$funcType <${f.source}:${f.lineDefined},${f.lastLineDefined}> (${f.code.size} instructions)")
+        print("${f.numParams}${varargFlag} params, ${f.maxStackSize} slots, ${f.upvalues.size} upvalues, ")
+        println("${f.localVars.size} locals, ${f.constants.size} constants, ${f.prototypes.size} functions")
     }
 
     private fun printCode(f: FuncPrototype) {
@@ -42,28 +37,27 @@ object Main {
         val lineInfo = f.lineInfo
         for (i in code.indices) {
             val line = if (lineInfo.isNotEmpty()) lineInfo[i].toString() else "-"
-            System.out.printf("\t%d\t[%s]\t0x%08X\n", i + 1, line, code[i])
+            // code[i].toString(16) 没有前 0
+            println("\t${i + 1}\t[${line}]\t${String.format("0x%08X", code[i])}")
         }
     }
 
     private fun printDetail(f: FuncPrototype) {
-        System.out.printf("constants (%d):\n", f.constants.size)
+        println("constants (${f.constants.size}):", )
         var i = 1
         for (k in f.constants) {
-            System.out.printf("\t%d\t%s\n", i++, constantToString(k))
+            println("\t${i++}\t${constantToString(k)}")
         }
         i = 0
-        System.out.printf("locals (%d):\n", f.locVars.size)
-        for (locVar in f.locVars) {
-            System.out.printf("\t%d\t%s\t%d\t%d\n", i++,
-                locVar.varName, locVar.startPC + 1, locVar.endPC + 1)
+        println("locals (${f.localVars.size}):", )
+        for (locVar in f.localVars) {
+            println("\t${i++}\t${locVar.varName}\t${locVar.startPC + 1}\t${locVar.endPC + 1}")
         }
         i = 0
-        System.out.printf("upvalues (%d):\n", f.upvalues.size)
+        println("upvalues (${f.upvalues.size}):")
         for (upval in f.upvalues) {
             val name = if (f.upvalueNames.isNotEmpty()) f.upvalueNames[i] else "-"
-            System.out.printf("\t%d\t%s\t%d\t%d\n", i++,
-                name, upval.instack, upval.idx)
+            println("\t${i++}\t${name}\t${upval.inStack}\t${upval.index}")
         }
     }
 
@@ -74,6 +68,4 @@ object Main {
             else -> k.toString()
         }
     }
-
-    private class Prototype
 }

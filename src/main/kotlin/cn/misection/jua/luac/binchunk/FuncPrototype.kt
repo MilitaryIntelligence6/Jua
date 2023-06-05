@@ -46,7 +46,7 @@ internal class FuncPrototype private constructor(
 
     val lineInfo: List<Int> = buf.readLineInfo()
 
-    val locVars: List<LocVar> = buf.readLocVars()
+    val localVars: List<LocalVar> = buf.readLocVars()
 
     val upvalueNames: List<String> = buf.readUpvalueNames()
 }
@@ -80,8 +80,8 @@ private fun ByteBuffer.readLineInfo(): List<Int> = mutableListOf<Int>().also {
     for (i in 0 until this.getInt()) it.add(this.getInt())
 }
 
-private fun ByteBuffer.readLocVars(): List<LocVar> = mutableListOf<LocVar>().also {
-    for (i in 0 until this.getInt()) it.add(LocVar.alloc(this))
+private fun ByteBuffer.readLocVars(): List<LocalVar> = mutableListOf<LocalVar>().also {
+    for (i in 0 until this.getInt()) it.add(LocalVar.alloc(this))
 }
 
 private fun ByteBuffer.readUpvalueNames(): List<String> = mutableListOf<String>().also {

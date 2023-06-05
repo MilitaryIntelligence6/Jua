@@ -91,7 +91,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>cn.misection.jua.luac.Main</mainClass>
+                            <mainClass>cn.misection.jua.luac.LuacL</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

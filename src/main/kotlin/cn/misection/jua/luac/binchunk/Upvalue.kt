@@ -19,7 +19,7 @@ internal class Upvalue private constructor(
         fun alloc(buf: ByteBuffer) = Upvalue(buf)
     }
 
-    val instack: Byte = buf.get()
+    val inStack: Byte = buf.get()
 
-    val idx: Byte = buf.get()
+    val index: Byte = buf.get()
 }

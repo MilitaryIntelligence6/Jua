@@ -10,14 +10,14 @@ import java.nio.ByteBuffer
  * @Description TODO
  * @CreateTime 2023年06月05日 14:52:00
  */
-internal class LocVar private constructor(
+internal class LocalVar private constructor(
     buf: ByteBuffer,
 ) {
 
     companion object {
 
         @JvmStatic
-        fun alloc(buf: ByteBuffer) = LocVar(buf)
+        fun alloc(buf: ByteBuffer) = LocalVar(buf)
     }
 
     val varName: String = buf.getLuaString()
