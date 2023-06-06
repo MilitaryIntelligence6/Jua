@@ -13,23 +13,23 @@ internal object Instruction {
     const val MAXARG_sBx = MAXARG_Bx shr 1
 
     @JvmStatic
-    fun getOpCode(i: Int) = OpCode.values()[i and 0x3F]
+    fun decodeOpCode(instCode: Int) = OpCode.values()[instCode and 0x3F]
 
     @JvmStatic
-    fun getA(i: Int) = i shr 6 and 0xFF
+    fun decodeA(instCode: Int) = instCode shr 6 and 0xFF
 
     @JvmStatic
-    fun getC(i: Int) = i shr 14 and 0x1FF
+    fun decodeC(instCode: Int) = instCode shr 14 and 0x1FF
 
     @JvmStatic
-    fun getB(i: Int) = i shr 23 and 0x1FF
+    fun decodeB(instCode: Int) = instCode shr 23 and 0x1FF
 
     @JvmStatic
-    fun getBx(i: Int) = i ushr 14
+    fun decodeBx(instCode: Int) = instCode ushr 14
 
     @JvmStatic
-    fun getSBx(i: Int) = getBx(i) - MAXARG_sBx
+    fun decodeSBx(instCode: Int) = decodeBx(instCode) - MAXARG_sBx
 
     @JvmStatic
-    fun getAx(i: Int) = i ushr 6
+    fun decodeAx(instCode: Int) = instCode ushr 6
 }

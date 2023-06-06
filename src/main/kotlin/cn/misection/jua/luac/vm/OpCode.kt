@@ -56,32 +56,32 @@ internal enum class OpCode(
     LOADNIL(0, 1, OpArgMask.OpArgU, OpArgMask.OpArgN, OpMode.iABC),
 
     /**
-     * ### R(A) := UpValue[B]
+     * ### R(A) := UpValue\[B\]
      */
     GETUPVAL(0, 1, OpArgMask.OpArgU, OpArgMask.OpArgN, OpMode.iABC),
 
     /**
-     * ### R(A) := UpValue[B][RK(C)]
+     * ### R(A) := UpValue\[B\]\[RK(C)\]
      */
     GETTABUP(0, 1, OpArgMask.OpArgU, OpArgMask.OpArgK, OpMode.iABC),
 
     /**
-     * ### R(A) := R(B)[RK(C)]
+     * ### R(A) := R(B)\[RK(C)\]
      */
     GETTABLE(0, 1, OpArgMask.OpArgR, OpArgMask.OpArgK, OpMode.iABC),
 
     /**
-     * ### UpValue[A][RK(B)] := RK(C)
+     * ### UpValue\[A\]\[RK(B)\] := RK(C)
      */
     SETTABUP(0, 0, OpArgMask.OpArgK, OpArgMask.OpArgK, OpMode.iABC),
 
     /**
-     * ### UpValue[B] := R(A)
+     * ### UpValue\[B\] := R(A)
      */
     SETUPVAL(0, 0, OpArgMask.OpArgU, OpArgMask.OpArgN, OpMode.iABC),
 
     /**
-     * ### R(A)[RK(B)] := RK(C)
+     * ### R(A)\[RK(B)\] := RK(C)
      */
     SETTABLE(0, 0, OpArgMask.OpArgK, OpArgMask.OpArgK, OpMode.iABC),
 
@@ -91,7 +91,7 @@ internal enum class OpCode(
     NEWTABLE(0, 1, OpArgMask.OpArgU, OpArgMask.OpArgU, OpMode.iABC),
 
     /**
-     * ### R(A+1) := R(B); R(A) := R(B)[RK(C)]
+     * ### R(A+1) := R(B); R(A) := R(B)\[RK(C)\]
      */
     SELF(0, 1, OpArgMask.OpArgR, OpArgMask.OpArgK, OpMode.iABC),
 
@@ -241,12 +241,12 @@ internal enum class OpCode(
     TFORLOOP(0,1,OpArgMask.OpArgR,OpArgMask.OpArgN, OpMode.iAsBx),
 
     /**
-     * ### R(A)[(C-1)*FPF+i] := R(A+i), 1 <= i <= B
+     * ### R(A)\[(C-1)*FPF+i\] := R(A+i), 1 <= i <= B
      */
     SETLIST(0, 0, OpArgMask.OpArgU, OpArgMask.OpArgU, OpMode.iABC),
 
     /**
-     * ### R(A) := closure(KPROTO[Bx])
+     * ### R(A) := closure(KPROTO\[Bx\])
      */
     CLOSURE(0, 1, OpArgMask.OpArgU, OpArgMask.OpArgN, OpMode.iABx),
 

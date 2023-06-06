@@ -43,30 +43,30 @@ internal object LuacL {
             val line = if (lineInfo.isNotEmpty()) lineInfo[i].toString() else "-"
             // code[i].toString(16) 没有前 0
 //            println("\t${i + 1}\t[${line}]\t${String.format("0x%08X", code[i])}")
-            print("\t${i + 1}\t[${line}]\t${String.format("%-10s", Instruction.getOpCode(code[i]))}")
+            print("\t${i + 1}\t[${line}]\t${String.format("%-10s", Instruction.decodeOpCode(code[i]))}")
             printOperands(code[i])
             println()
         }
     }
 
-    private fun printOperands(i: Int) {
-        val opCode: OpCode = Instruction.getOpCode(i)
-        val a: Int = Instruction.getA(i)
+    private fun printOperands(instCode: Int) {
+        val opCode: OpCode = Instruction.decodeOpCode(instCode)
+        val a: Int = Instruction.decodeA(instCode)
         when (opCode.opMode) {
             OpMode.iABC -> {
                 print(a)
                 if (opCode.argBMode !== OpArgMask.OpArgN) {
-                    val b: Int = Instruction.getB(i)
+                    val b: Int = Instruction.decodeB(instCode)
                     print(" ${if (b > 0xFF) -1 - (b and 0xFF) else b}")
                 }
                 if (opCode.argCMode !== OpArgMask.OpArgN) {
-                    val c: Int = Instruction.getC(i)
+                    val c: Int = Instruction.decodeC(instCode)
                     print(" ${if (c > 0xFF) -1 - (c and 0xFF) else c}")
                 }
             }
             OpMode.iABx -> {
                 print(a)
-                val bx: Int = Instruction.getBx(i)
+                val bx: Int = Instruction.decodeBx(instCode)
                 if (opCode.argBMode === OpArgMask.OpArgK) {
                     print(" ${-1 - bx}", )
                 } else if (opCode.argBMode === OpArgMask.OpArgU) {
@@ -74,11 +74,11 @@ internal object LuacL {
                 }
             }
             OpMode.iAsBx -> {
-                val sbx: Int = Instruction.getSBx(i)
+                val sbx: Int = Instruction.decodeSBx(instCode)
                 print("$a $sbx")
             }
             OpMode.iAx -> {
-                val ax: Int = Instruction.getAx(i)
+                val ax: Int = Instruction.decodeAx(instCode)
                 print(-1 - ax)
             }
         }
